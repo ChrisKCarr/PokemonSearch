@@ -1,17 +1,22 @@
 import React from "react";
 import Card from "./Card";
 
-const CardList = ({ robots }) => {
+const CardList = ({ pokemons }) => {
+  const capitalize = (str) => str[0].toUpperCase() + str.substr(1);
+
   return (
     <div>
-      {robots.map((user, i) => {
+      {pokemons.map((poke, i) => {
+        const urlArray = poke["url"].split("/");
+        const pokeId = urlArray[urlArray.length - 2];
+        const pokeName = capitalize(poke.name);
         return (
-          <Card
-            key={robots[i].id}
-            id={robots[i].id}
-            name={robots[i].name}
-            email={robots[i].email}
-          />
+          // console.log("CardList: " + poke["url"]),
+          // console.log("urlArray: " + urlArray),
+          // console.log("ID: " + pokeId),
+          // console.log(pokeName),
+          // console.log("types: " + pokeId.types),
+          <Card key={pokeId} id={pokeId} name={pokeName} types={pokeId.types} />
         );
       })}
     </div>
