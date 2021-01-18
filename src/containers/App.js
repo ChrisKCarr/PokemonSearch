@@ -9,16 +9,23 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      robots: [],
+      pokemons: [],
       searchfield: "",
     };
   }
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=897&offset=0")
       .then((response) => response.json())
-      .then((users) => {
-        this.setState({ robots: users });
+      .then((pokemon) => {
+        // console
+        //   .log
+        //   pokemon["name"],
+        //   pokemon["types"][0]["type"]["name"],
+        //   pokemon
+        //   ();
+        this.setState({ pokemons: pokemon.results });
+        // console.log(this.state);
       });
   }
 
@@ -27,19 +34,25 @@ class App extends Component {
   };
 
   render() {
-    const { robots, searchfield } = this.state;
-    const filteredRobots = robots.filter((robot) => {
-      return robot.name.toLowerCase().includes(searchfield.toLowerCase());
+    const { pokemons, searchfield } = this.state;
+    console.log("render total pokemon: " + pokemons.length);
+    const filteredPokemons = pokemons.filter((pokemon) => {
+      const urlArray = pokemon["url"].split("/");
+      const pokeId = urlArray[urlArray.length - 2];
+      return (
+        pokemon.name.toLowerCase().includes(searchfield.toLowerCase()) ||
+        pokeId === searchfield
+      );
     });
-    return !this.state.robots.length ? (
+    return !this.state.pokemons.length ? (
       <h1>Loading</h1>
     ) : (
       <div className="tc">
-        <h1 className="f1">RoboFriends</h1>
+        <h1 className="f1">Pokédex Search</h1>
         <SearchBox searchChange={this.onSearchChange} />
         <Scroll>
           <ErrorBoundary>
-            <CardList robots={filteredRobots} />
+            <CardList pokemons={filteredPokemons} />
           </ErrorBoundary>
         </Scroll>
       </div>
